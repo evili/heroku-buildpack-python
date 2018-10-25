@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -x
+
 # Syntax sugar.
 BIN_DIR=$(cd "$(dirname "$0")" || return; pwd) # absolute path
 
@@ -30,7 +30,8 @@ if [ -f "$MANAGE_FILE" ] && [ "$DJANGO_INSTALLED" ]; then
 
     # Create a temporary file for collecting the collectstaic logs.
     TEST_LOG=$(mktemp)
-
+    printenv 2>&1 | tee "$TEST_LOG"
+    python "$MANAGE_FILE" diffsettings 2>&1 | tee "$TEST_LOG"
     python "$MANAGE_FILE" test 2>&1 | tee "$TEST_LOG"
     TEST_STATUS="${PIPESTATUS[0]}"
 
