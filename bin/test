@@ -30,9 +30,11 @@ if [ -f "$MANAGE_FILE" ] && [ "$DJANGO_INSTALLED" ]; then
 
     # Create a temporary file for collecting the collectstaic logs.
     TEST_LOG=$(mktemp)
-    printenv 2>&1 | tee "$TEST_LOG"
+    echo "##### ENVIRONMENT #####"     2>&1 | tee "$TEST_LOG"
+    printenv                           2>&1 | tee "$TEST_LOG"
+    echo "##### DIFF SETTINGS #####"   2>&1 | tee "$TEST_LOG"
     python "$MANAGE_FILE" diffsettings 2>&1 | tee "$TEST_LOG"
-    python "$MANAGE_FILE" test 2>&1 | tee "$TEST_LOG"
+    python "$MANAGE_FILE" test         2>&1 | tee "$TEST_LOG"
     TEST_STATUS="${PIPESTATUS[0]}"
 
     set -e
