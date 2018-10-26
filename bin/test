@@ -43,9 +43,12 @@ if [ -f "$MANAGE_FILE" ] && [ "$DJANGO_INSTALLED" ]; then
     echo "##### DIFF SETTINGS #####"   2>&1   | tee "$TEST_LOG"
     python "$MANAGE_FILE" diffsettings 2>&1   | tee "$TEST_LOG"
     # Create the role "postgres" expected by heroku and friens.
-    python "$MANAGE_FILE" dbshell <<EOF 2>&1 | tee "$TEST_LOG"
+    if [  x"$POSTGRES_ENABLED" == xtrue ]
+    then 
+        python "$MANAGE_FILE" dbshell <<EOF 2>&1 | tee "$TEST_LOG"
 CREATE ROLE postgres SUPERUSER;
 EOF
+    fi
     ${test_cmd} "$MANAGE_FILE" test     2>&1 | tee "$TEST_LOG"
     TEST_STATUS="${PIPESTATUS[0]}"
 
