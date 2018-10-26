@@ -21,7 +21,7 @@ DJANGO_INSTALLED=1
 coverage=$(which coverage 2> /dev/null)
 if [ -x "${coverage}" ]
 then
-    test_cmd=${coverage}
+    test_cmd="${coverage} run"
 else
     test_cmd=python
 fi
